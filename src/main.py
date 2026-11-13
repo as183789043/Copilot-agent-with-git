@@ -8,15 +8,15 @@ app = FastAPI(
 )
 
 
-class AddRequest(BaseModel):
-    a: float = Field(..., description="First number to add")
-    b: float = Field(..., description="Second number to add")
+class ArithmeticRequest(BaseModel):
+    a: int | float = Field(..., description="First number")
+    b: int | float = Field(..., description="Second number")
 
 
-class AddResponse(BaseModel):
-    a: float = Field(..., description="First number")
-    b: float = Field(..., description="Second number")
-    result: float = Field(..., description="Sum of the two numbers")
+class ArithmeticResponse(BaseModel):
+    a: int | float = Field(..., description="First number")
+    b: int | float = Field(..., description="Second number")
+    result: int | float = Field(..., description="Arithmetic result")
 
 
 @app.get("/", summary="Health check")
@@ -24,9 +24,16 @@ def read_root() -> dict[str, str]:
     return {"message": "Add API is running"}
 
 
-@app.post("/add", response_model=AddResponse, summary="Add two numbers")
-def add_numbers(payload: AddRequest) -> AddResponse:
-    return AddResponse(a=payload.a, b=payload.b, result=payload.a + payload.b)
+@app.post("/add", response_model=ArithmeticResponse, summary="Add two numbers")
+def add_numbers(payload: ArithmeticRequest) -> ArithmeticResponse:
+    return ArithmeticResponse(a=payload.a, b=payload.b, result=payload.a + payload.b)
+
+
+@app.post(
+    "/subtract", response_model=ArithmeticResponse, summary="Subtract two numbers"
+)
+def subtract_numbers(payload: ArithmeticRequest) -> ArithmeticResponse:
+    return ArithmeticResponse(a=payload.a, b=payload.b, result=payload.a - payload.b)
 
 
 if __name__ == "__main__":
