@@ -1,9 +1,9 @@
 [project]
 name = "copilot-agent-with-git"
 version = "0.1.0"
-description = "demo-project"
+description = "FastAPI arithmetic service demo with CI and testing"
 authors = [
-    {name = "Rick Hsu",email = "as123789043@gmail.com"}
+    { name = "Rick Hsu", email = "as123789043@gmail.com" }
 ]
 readme = "README.md"
 requires-python = ">=3.12"
@@ -23,8 +23,26 @@ build-backend = "poetry.core.masonry.api"
 [dependency-groups]
 dev = [
     "pytest (>=9.2.0,<10.0.0)",
-    "pytest-html (>=4.1.1,<5.0.0)"
+    "pytest-html (>=4.1.1,<5.0.0)",
+    "black (>=24.4.2,<25.0.0)",
+    "ruff (>=0.5.0,<1.0.0)",
 ]
 
 [tool.pytest.ini_options]
 pythonpath = ["."]
+
+[tool.black]
+line-length = 88
+target-version = ["py312"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+ignore = []
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"

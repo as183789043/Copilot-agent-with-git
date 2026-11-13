@@ -1,19 +1,23 @@
-from fastapi import FastAPI
-from pydantic import BaseModel, Field
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel, ConfigDict, Field
 
 app = FastAPI(
-    title="Add Service",
+    title="Arithmetic Service",
     version="0.1.0",
-    description="A simple FastAPI demo service for adding two numbers.",
+    description="A simple FastAPI service for basic arithmetic operations.",
 )
 
 
 class ArithmeticRequest(BaseModel):
-    a: int | float = Field(..., description="First number")
-    b: int | float = Field(..., description="Second number")
+    model_config = ConfigDict(extra="forbid")
+
+    a: int | float = Field(..., description="First number", examples=[10])
+    b: int | float = Field(..., description="Second number", examples=[3])
 
 
 class ArithmeticResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     a: int | float = Field(..., description="First number")
     b: int | float = Field(..., description="Second number")
     result: int | float = Field(..., description="Arithmetic result")
@@ -21,7 +25,7 @@ class ArithmeticResponse(BaseModel):
 
 @app.get("/", summary="Health check")
 def read_root() -> dict[str, str]:
-    return {"message": "Add API is running"}
+    return {"message": "Arithmetic API is running"}
 
 
 @app.post("/add", response_model=ArithmeticResponse, summary="Add two numbers")
@@ -34,6 +38,21 @@ def add_numbers(payload: ArithmeticRequest) -> ArithmeticResponse:
 )
 def subtract_numbers(payload: ArithmeticRequest) -> ArithmeticResponse:
     return ArithmeticResponse(a=payload.a, b=payload.b, result=payload.a - payload.b)
+
+
+@app.post(
+    "/multiply", response_model=ArithmeticResponse, summary="Multiply two numbers"
+)
+def multiply_numbers(payload: ArithmeticRequest) -> ArithmeticResponse:
+    return ArithmeticResponse(a=payload.a, b=payload.b, result=payload.a * payload.b)
+
+
+@app.post("/divide", response_model=ArithmeticResponse, summary="Divide two numbers")
+def divide_numbers(payload: ArithmeticRequest) -> ArithmeticResponse:
+    if payload.b == 0:
+        raise HTTPException(status_code=400, detail="Division by zero is not allowed.")
+
+    return ArithmeticResponse(a=payload.a, b=payload.b, result=payload.a / payload.b)
 
 
 if __name__ == "__main__":
