@@ -32,7 +32,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          poetry install --with dev --no-interaction
+          poetry lock --no-interaction
+          poetry install --with dev --no-interaction --no-root
 
       - name: Create report folder
         run: mkdir -p assets
