@@ -122,3 +122,6 @@ poetry run ruff check .
 - Open a pull request before merging
 - Keep tests green before merge
 
+
+## git workflow tree
+<img width="1072" height="535" alt="image" src="https://github.com/user-attachments/assets/00651e36-07c1-43c2-9455-cdfdf2b5cb4f" />
